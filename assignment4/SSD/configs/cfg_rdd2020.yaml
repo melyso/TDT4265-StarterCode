@@ -9,6 +9,6 @@ SOLVER:
     MAX_ITER: 10000
     GAMMA: 0.1
     BATCH_SIZE: 32
-    LR: 2e-3
+    LR: 2e-4
 OUTPUT_DIR: 'outputs/project'
 DATASET_DIR: "/work/datasets"
