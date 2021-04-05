@@ -1,4 +1,5 @@
 import torch
+from torch import nn
 import torchvision.models as models
 
 class ResNet(torch.nn.Module):
