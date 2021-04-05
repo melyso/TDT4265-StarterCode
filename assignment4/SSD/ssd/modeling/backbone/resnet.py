@@ -19,21 +19,22 @@ class ResNet(torch.nn.Module):
 
         #ouput size 37
         self.conv1 = nn.Sequential(
-            resnet.conv1(),
-            resnet.bn1(),
-            resnet.relu(),
-            resnet.maxpool(),
-            resnet.layer1(),
-            resnet.layer2())
+            resnet.conv1,
+            resnet.bn1,
+            resnet.relu,
+            resnet.maxpool,
+            resnet.layer1,
+            resnet.layer2
+        )
         
         #output size 18
         self.conv2 = nn.Sequential(
-            resnet.layer3()
+            resnet.layer3
         )
 
         #output size 9
         self.conv3 = nn.Sequential(
-            resnet.layer4()
+            resnet.layer4
         )
 
         #output res 5x5
@@ -77,10 +78,19 @@ class ResNet(torch.nn.Module):
         where out_features[0] should have the shape:
             shape(-1, output_channels[0], 38, 38),
         """
-        out_features = []
+
+        output_0 = self.conv1(x)
+        output_1 = self.conv2(output_0)
+        output_2 = self.conv3(output_1)
+        output_3 = self.conv4(output_2)
+        output_4 = self.conv5(output_3)
+        output_5 = self.conv6(output_4)
+        
+        
+        out_features = [output_0, output_1, output_2, output_3, output_4, output_5]
         for idx, feature in enumerate(out_features):
             w, h = self.output_feature_shape[idx]
-            expected_shape = (out_channel, h, w)
+            expected_shape = (self.output_channels[idx], h, w)
             assert feature.shape[1:] == expected_shape, \
                 f"Expected shape: {expected_shape}, got: {feature.shape[1:]} at output IDX: {idx}"
         return tuple(out_features)

@@ -34,13 +34,19 @@ def start_train(cfg):
     logger = logging.getLogger('SSD.trainer')
     model = SSDDetector(cfg)
     model = torch_utils.to_cuda(model)
-
-    optimizer = torch.optim.SGD(
-        model.parameters(),
-        lr=cfg.SOLVER.LR,
-        momentum=cfg.SOLVER.MOMENTUM,
-        weight_decay=cfg.SOLVER.WEIGHT_DECAY
-    )
+    if cfg.SOLVER.OPTIM == "SGD":
+        optimizer = torch.optim.SGD(
+            model.parameters(),
+            lr=cfg.SOLVER.LR,
+            momentum=cfg.SOLVER.MOMENTUM,
+            weight_decay=cfg.SOLVER.WEIGHT_DECAY
+        )
+    if cfg.SOLVER.OPTIM == "Adam":
+        optimizer = torch.optim.Adam(
+            model.parameters(),
+            lr=cfg.SOLVER.LR,
+            weight_decay=cfg.SOLVER.WEIGHT_DECAY
+        )
 
 
     arguments = {"iteration": 0}
