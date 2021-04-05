@@ -3,6 +3,8 @@ import matplotlib.pyplot as plt
 import xml.etree.ElementTree as ET
 import seaborn as sns
 import pandas as pd
+import numpy as np
+import cv2
 
 annotations_dir = 'RDD2020_filtered/Annotations/'
 
@@ -12,33 +14,51 @@ aspect_ratio = []
 colors = []
 names = []
 color_dict = {}
+heat_maps = {}
+
+heat_w, heat_h = 500, 500
 
 for file_name in os.listdir(annotations_dir):
+    img_w, img_h = None, None
+    scale_w, scale_h = None, None
     tree = ET.parse(annotations_dir+file_name)
     root = tree.getroot()
     print(file_name)
     print(root.tag)
     for child in root:
+        if child.tag == 'size':
+            for pos, grand_child in enumerate(child):
+                if grand_child.tag == 'width':
+                    img_w = int(grand_child.text)
+                    scale_w = heat_w/img_w
+                if grand_child.tag == 'height':
+                    img_h = int(grand_child.text)
+                    scale_h = heat_h/img_h
         if child.tag == 'object':
             name_pos = None
             bnd_box_pos = None
-            for pos, grand_children in enumerate(child):
-                if grand_children.tag == 'name':
+            for pos, grand_child in enumerate(child):
+                if grand_child.tag == 'name':
                     name_pos = pos
-                if grand_children.tag == 'bndbox':
+                if grand_child.tag == 'bndbox':
                     bnd_box_pos = pos
                 
             name = child[name_pos].text
             names.append(name)
-            x_min, y_min, x_max, y_max = [child[bnd_box_pos][x].text for x in range(4)]
-            print(x_min, y_min, x_max, y_max)
-            w = int(x_max) - int(x_min)
-            h = int(y_max) - int(y_min)
+            x_min, y_min, x_max, y_max = [int(child[bnd_box_pos][x].text) for x in range(4)]
+            w = x_max - x_min
+            h = y_max - y_min
+
             widths.append(w)
             heights.append(h)
             aspect_ratio.append(w/h)
             colors.append(color_dict.setdefault(name, len(color_dict)))
 
+            heat_map = heat_maps.setdefault(name, np.zeros((heat_w, heat_h)))
+            heat_map[int(round(y_min*scale_h)):int(round(y_max*scale_h)), int(round(x_min*scale_w)):int(round(x_max*scale_w))]+=1
+
+
+# Display scatterplot of height-width of bounding-boxes.
 fig, ax = plt.subplots()
 scatter = ax.scatter(widths, heights, 0.1, colors)
 legend_handles, legend_labels = scatter.legend_elements()
@@ -49,7 +69,29 @@ plt.xlabel('width')
 plt.ylabel('height')
 plt.show()
 
+# Display boxplot of aspect ratios for different classes.
 df = pd.DataFrame({'names':names, 'aspect_ratio':aspect_ratio})
 boxplot = sns.boxplot(x='names', y='aspect_ratio' , data=df)
 plt.show()
 print(df.groupby('names').describe())
+
+# Display heatmap for different classes.
+for damage_type in heat_maps.keys():
+    plt.imshow(heat_maps[damage_type], cmap='hot', interpolation='nearest')
+    plt.title(damage_type)
+    plt.show()
+
+# Display combined heatmap.
+combined = heat_maps['D00']+heat_maps['D10']+heat_maps['D20']+heat_maps['D40']
+plt.imshow(combined, cmap='hot', interpolation='nearest')
+plt.title('Combined')
+plt.show()
+
+# Display a sample image with combined heatmap as overlay.
+img = cv2.imread('RDD2020_filtered/JPEGImages/Japan_005338.jpg', 1)
+gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+combined_resized = cv2.resize(combined, dsize=img.shape[:2], interpolation=cv2.INTER_CUBIC)
+combined_resized = np.uint8(combined_resized/np.max(combined_resized)*255)
+heatmap_img = cv2.applyColorMap(combined_resized, cv2.COLORMAP_JET)
+cv2.imshow('Heatmap from view', cv2.addWeighted(heatmap_img, 0.5, img, 0.5, 0))
+cv2.waitKey(0)
