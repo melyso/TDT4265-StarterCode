@@ -1,3 +1,6 @@
+import torch
+import torchvision.models as models
+
 class ResNet(torch.nn.Module):
     def __init__(self, cfg):
         super().__init__()
@@ -5,6 +8,60 @@ class ResNet(torch.nn.Module):
         self.output_channels = output_channels
         image_channels = cfg.MODEL.BACKBONE.INPUT_CHANNELS
         self.output_feature_shape = cfg.MODEL.PRIORS.FEATURE_MAPS
+
+        resnet = models.resnet34(pretrained=True)
+        for c in resnet.children():
+            for p in c.parameters():
+                p.requires_grad = False
+        
+        #given  input size 300x300:
+
+        #ouput size 37
+        self.conv1 = nn.Sequential(
+            resnet.conv1(),
+            resnet.bn1(),
+            resnet.relu(),
+            resnet.maxpool(),
+            resnet.layer1(),
+            resnet.layer2())
+        
+        #output size 18
+        self.conv2 = nn.Sequential(
+            resnet.layer3()
+        )
+
+        #output size 9
+        self.conv3 = nn.Sequential(
+            resnet.layer4()
+        )
+
+        #output res 5x5
+        self.conv4 = nn.Sequential(
+            nn.ReLU(),
+            nn.Conv2d(in_channels=output_channels[2], out_channels=128, kernel_size=3, stride=1, padding=1),
+            nn.ReLU(),
+            nn.Conv2d(in_channels=128, out_channels=output_channels[3], kernel_size=3, stride=2, padding=1),
+        )
+
+        #output res 3x3
+        self.conv5 = nn.Sequential(
+            nn.ReLU(),
+            nn.Conv2d(in_channels=output_channels[3], out_channels=128, kernel_size=3, stride=1, padding=1),
+            nn.ReLU(),
+            nn.Conv2d(in_channels=128, out_channels=output_channels[4], kernel_size=3, stride=2, padding=1),
+        )
+
+        #output res 1x1
+        self.conv6 = nn.Sequential(
+            nn.ReLU(),
+            nn.Conv2d(in_channels=output_channels[4], out_channels=128, kernel_size=3, stride=1, padding=1),
+            nn.ReLU(),
+            nn.Conv2d(in_channels=128, out_channels=output_channels[5], kernel_size=3, stride=1, padding=0),
+        )
+
+
+
+
 
     def forward(self, x):
         """
