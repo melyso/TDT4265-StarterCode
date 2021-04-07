@@ -11,9 +11,9 @@ class ResNet(torch.nn.Module):
         self.output_feature_shape = cfg.MODEL.PRIORS.FEATURE_MAPS
 
         resnet = models.resnet34(pretrained=True)
-        for c in resnet.children():
-            for p in c.parameters():
-                p.requires_grad = False
+        #for c in resnet.children():
+        #    for p in c.parameters():
+        #        p.requires_grad = False
         
         #given  input size 300x300:
 
