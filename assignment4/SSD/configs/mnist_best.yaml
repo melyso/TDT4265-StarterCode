@@ -7,12 +7,13 @@ MODEL:
     INPUT_CHANNELS: 3
     BASIC: False
   PRIORS:
-    MIN_SIZES: [[12, 12], [60, 60], [111, 111], [162, 162], [213, 213], [264, 264]]
+    MIN_SIZES: [[2, 2], [15, 15], [30, 30], [60, 60], [150, 150], [230, 230]]
+    MAX_SIZES: [[15, 15], [30, 30], [60, 60], [150, 150], [230, 230], [300, 300]]
 INPUT:
   IMAGE_SIZE: [300, 300]
 DATASETS:
-  TRAIN: ("mnist_detection_train", "mnist_detection_val")
-  TEST: ("mnist_detection_val", )
+  TRAIN: ("rdd2020_train",)
+  TEST: ("rdd2020_val", )
 SOLVER:
   MAX_ITER: 15000
   GAMMA: 0.1
@@ -20,5 +21,5 @@ SOLVER:
   LR: 1e-3
   WEIGHT_DECAY: 1e-4
   OPTIM: "Adam"
-OUTPUT_DIR: 'outputs/basic'
+OUTPUT_DIR: 'outputs/rdd2020'
 DATASET_DIR: "datasets"
