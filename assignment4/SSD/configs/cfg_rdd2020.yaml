@@ -1,11 +1,11 @@
 MODEL:
     NUM_CLASSES: 5
-    BACKBONE:
-        NAME: 'resnet'
-        OUT_CHANNELS: [128, 256, 512, 128, 64, 64]
-    PRIORS:
-        MIN_SIZES: [[7, 7], [20, 20], [111, 111], [162, 162], [213, 213], [264, 264]]
-        MAX_SIZES: [[120, 120], [160, 160], [200, 200], [260, 260], [310, 310], [350, 350]]
+#    BACKBONE:
+#        NAME: 'resnet'
+#        OUT_CHANNELS: [128, 256, 512, 128, 64, 64]
+#    PRIORS:
+#        MIN_SIZES: [[7, 7], [20, 20], [111, 111], [162, 162], [213, 213], [264, 264]]
+#        MAX_SIZES: [[120, 120], [160, 160], [200, 200], [260, 260], [310, 310], [350, 350]]
 
 INPUT:
     PIXEL_STD: [0.003921569, 0.003921569, 0.003921569] # Set pixel std to 1/255 as VGG is pre-trained on images in range (roughly) [-127.5, 127.5]
@@ -18,11 +18,11 @@ DATASETS:
 SOLVER:
     MAX_ITER: 100000
     GAMMA: 0.1
-    BATCH_SIZE: 16
+    BATCH_SIZE: 32
     LR: 1e-4
     WEIGHT_DECAY: 1e-4
     OPTIM: "Adam"
-OUTPUT_DIR: 'outputs/resnet_unfrozen'
+OUTPUT_DIR: 'outputs/rdd2020_vgg'
 DATASET_DIR: "/work/datasets"
-EVAL_STEP: 5000
-MODEL_SAVE_STEP: 5000
+EVAL_STEP: 500
+MODEL_SAVE_STEP: 500
