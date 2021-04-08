@@ -127,6 +127,18 @@ class ToTensor(object):
     def __call__(self, cvimage, boxes=None, labels=None):
         return torch.from_numpy(cvimage.astype(np.float32)).permute(2, 0, 1), boxes, labels
 
+# Borrowed from luffic SSD
+class RandomBrightness(object):
+    def __init__(self, delta=32):
+        assert delta >= 0.0
+        assert delta <= 255.0
+        self.delta = delta
+
+    def __call__(self, image, boxes=None, labels=None):
+        if random.randint(2):
+            delta = random.uniform(-self.delta, self.delta)
+            image += delta
+        return image, boxes, labels
 
 class RandomSampleCrop(object):
     """Crop
