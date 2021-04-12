@@ -3,7 +3,7 @@
 Make sure to read through this tutorial before looking at other resources.
 
 ## Other resources:
-* Labeling tips. From the staff's experience with the tool, here are a couple of tips: [https://piazza.com/class/k53ssppxkwb5yy?cid=185](https://piazza.com/class/k53ssppxkwb5yy?cid=185). 
+* Labeling tips. From the staff's experience with the tool, here are a couple of tips: [https://piazza.com/class/kjvrhk2v4w7pu?cid=335](https://piazza.com/class/kjvrhk2v4w7pu?cid=335). 
 * Labeling specification. 
 * OPENCV CVAT detailed user guide: [https://github.com/opencv/cvat/blob/develop/cvat/apps/documentation/user_guide.md#interface-of-the-annotation-tool](https://github.com/opencv/cvat/blob/develop/cvat/apps/documentation/user_guide.md#interface-of-the-annotation-tool)
 * Interpolation mode tutorial: [https://www.youtube.com/watch?v=Hc3oudNuDsY&ab_channel=NikitaManovich](https://www.youtube.com/watch?v=Hc3oudNuDsY&ab_channel=NikitaManovich).
