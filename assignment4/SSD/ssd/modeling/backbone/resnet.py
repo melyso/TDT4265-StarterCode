@@ -25,7 +25,7 @@ class ResNet(torch.nn.Module):
                 resnet.relu,
                 resnet.maxpool,
                 resnet.layer1,
-                resnet.layer2
+                resnet.layer2,
                 resnet.layer3
             )
             
