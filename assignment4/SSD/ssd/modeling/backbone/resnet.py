@@ -10,9 +10,9 @@ class ResNet(torch.nn.Module):
         image_channels = cfg.MODEL.BACKBONE.INPUT_CHANNELS
         self.output_feature_shape = cfg.MODEL.PRIORS.FEATURE_MAPS
 
-        resnet = models.resnet152(pretrained=True)
+        resnet = models.resnet34(pretrained=True)
         # Freeze first half of network
-        for c in list(resnet.children())[-5]:
+        for c in list(resnet.children())[:-5]:
             for p in c.parameters():
                 p.requires_grad = False
         
