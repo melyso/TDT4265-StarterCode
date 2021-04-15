@@ -17,27 +17,55 @@ class ResNet(torch.nn.Module):
                 p.requires_grad = False
         
         #given  input size 300x300:
+        if cfg.INPUT.IMAGE_SIZE == [600, 600]:
+            #ouput size 37    
+            self.conv1 = nn.Sequential(
+                resnet.conv1,
+                resnet.bn1,
+                resnet.relu,
+                resnet.maxpool,
+                resnet.layer1,
+                resnet.layer2
+                resnet.layer3
+            )
+            
+            #output size 18
+            self.conv2 = nn.Sequential(
+                resnet.layer4
+            )
 
-        #ouput size 37
-        self.conv1 = nn.Sequential(
-            resnet.conv1,
-            resnet.bn1,
-            resnet.relu,
-            resnet.maxpool,
-            resnet.layer1,
-            resnet.layer2
-        )
-        
-        #output size 18
-        self.conv2 = nn.Sequential(
-            resnet.layer3
-        )
+            #output size 9
+            self.conv3 = nn.Sequential(
+                nn.BatchNorm2d(self.output_channels[1]),
+                nn.ReLU(),
+                nn.Conv2d(self.output_channels[1], 256, 3, padding=1),
+                nn.BatchNorm2d(256),
+                nn.ReLU(),
+                nn.Conv2d(256, 256, 3, padding=1),
+                nn.BatchNorm2d(256),
+                nn.ReLU(),
+                nn.Conv2d(256, self.output_channels[2], 3, stride=2, padding=1)
+            )
+        else:
+            #ouput size 37    
+            self.conv1 = nn.Sequential(
+                resnet.conv1,
+                resnet.bn1,
+                resnet.relu,
+                resnet.maxpool,
+                resnet.layer1,
+                resnet.layer2
+            )
+            
+            #output size 18
+            self.conv2 = nn.Sequential(
+                resnet.layer3
+            )
 
-        #output size 9
-        self.conv3 = nn.Sequential(
-            resnet.layer4
-        )
-
+            #output size 9
+            self.conv3 = nn.Sequential(
+                resnet.layer4
+            )
         #output res 5x5
         self.conv4 = nn.Sequential(
             nn.BatchNorm2d(self.output_channels[2]),
