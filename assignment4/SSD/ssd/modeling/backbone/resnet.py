@@ -16,7 +16,7 @@ class ResNet(torch.nn.Module):
             for p in c.parameters():
                 p.requires_grad = False
         
-        #given  input size 300x300:
+        #given  input size 600x600:
         if cfg.INPUT.IMAGE_SIZE == [600, 600]:
             #ouput size 37    
             self.conv1 = nn.Sequential(
@@ -46,6 +46,7 @@ class ResNet(torch.nn.Module):
                 nn.ReLU(),
                 nn.Conv2d(256, self.output_channels[2], 3, stride=2, padding=1)
             )
+        #given  input size 300x300:
         else:
             #ouput size 37    
             self.conv1 = nn.Sequential(
