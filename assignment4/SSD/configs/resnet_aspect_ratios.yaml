@@ -12,7 +12,7 @@ MODEL:
 #        MAX_SIZES: [[120, 120], [160, 160], [200, 200], [260, 260], [310, 310], [350, 350]]
 
 INPUT:
-    PIXEL_STD: [0.003921569, 0.003921569, 0.003921569] # Set pixel std to 1/255 as VGG is pre-trained on images in range (roughly) [-127.5, 127.5]
+    PIXEL_STD: [0.229, 0.224, 0.225] #[0.003921569, 0.003921569, 0.003921569] # Set pixel std to 1/255 as VGG is pre-trained on images in range (roughly) [-127.5, 127.5]
     IMAGE_SIZE: [300, 300]
 DATASETS:
 #    TRAIN: ("mnist_detection_train", "mnist_detection_val")
