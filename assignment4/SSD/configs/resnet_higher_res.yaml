@@ -4,7 +4,7 @@ MODEL:
         NAME: 'resnet'
         #for using anything above resnet34
         #OUT_CHANNELS: [1024, 2048, 256, 128, 64, 64]
-        OUT_CHANNELS: [512, 1024, 256, 128, 64, 64]
+        OUT_CHANNELS: [256, 512, 256, 128, 64, 64]
     PRIORS:
         # #boxes = 2 + #ratio * 2
         BOXES_PER_LOCATION: [6, 6, 6, 6, 6, 6]
