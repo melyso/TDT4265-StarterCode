@@ -20,13 +20,38 @@ heat_maps = {}
 heat_w, heat_h = 500, 500
 
 def analyze_tdt():
+    img_w, img_h = [1920, 1080]
+    scale_w = heat_w / img_w
+    scale_h = heat_h / img_h
+
     with open('tdt4265/labels.json') as f:
         labels = json.load(f)
-    print(labels.keys())
-    print(labels['annotations'][0])
-    print(labels['info'])
-    print(labels['licences'])
-    print(labels['categories'])
+    #print(labels.keys())
+    #print(labels['annotations'][0])
+    #print(labels['info'])
+    #print(labels['licences'])
+    #print(labels['categories'])
+
+    nameslist =['D00', 'D10', 'D20', 'D40']
+    for annotation in labels['annotations']:
+
+        name = nameslist[ int(annotation['category_id']) ]
+        names.append(name)
+        colors.append(color_dict.setdefault(name, len(color_dict)))
+        heat_map = heat_maps.setdefault(name, np.zeros((heat_w, heat_h)))
+
+        x_top_left, y_top_left, width, height = annotation['bbox']
+
+        widths.append(width)
+        heights.append(height)
+        aspect_ratio.append(width/height)
+
+        y_min = y_top_left
+        y_max = y_top_left + height
+        x_min = x_top_left
+        x_max = x_top_left + width
+
+        heat_map[int(round(y_min*scale_h)):int(round(y_max*scale_h)), int(round(x_min*scale_w)):int(round(x_max*scale_w))]+=1
 
 
 def analyze_rdd():
