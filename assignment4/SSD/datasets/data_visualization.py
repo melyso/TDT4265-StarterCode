@@ -5,6 +5,7 @@ import seaborn as sns
 import pandas as pd
 import numpy as np
 import cv2
+import json
 
 annotations_dir = 'RDD2020_filtered/Annotations/'
 
@@ -18,45 +19,58 @@ heat_maps = {}
 
 heat_w, heat_h = 500, 500
 
-for file_name in os.listdir(annotations_dir):
-    img_w, img_h = None, None
-    scale_w, scale_h = None, None
-    tree = ET.parse(annotations_dir+file_name)
-    root = tree.getroot()
-    print(file_name)
-    print(root.tag)
-    for child in root:
-        if child.tag == 'size':
-            for pos, grand_child in enumerate(child):
-                if grand_child.tag == 'width':
-                    img_w = int(grand_child.text)
-                    scale_w = heat_w/img_w
-                if grand_child.tag == 'height':
-                    img_h = int(grand_child.text)
-                    scale_h = heat_h/img_h
-        if child.tag == 'object':
-            name_pos = None
-            bnd_box_pos = None
-            for pos, grand_child in enumerate(child):
-                if grand_child.tag == 'name':
-                    name_pos = pos
-                if grand_child.tag == 'bndbox':
-                    bnd_box_pos = pos
-                
-            name = child[name_pos].text
-            names.append(name)
-            x_min, y_min, x_max, y_max = [int(child[bnd_box_pos][x].text) for x in range(4)]
-            w = x_max - x_min
-            h = y_max - y_min
+def analyze_tdt():
+    with open('tdt4265/labels.json') as f:
+        labels = json.load(f)
+    print(labels.keys())
+    print(labels['annotations'][0])
+    print(labels['info'])
+    print(labels['licences'])
+    print(labels['categories'])
 
-            widths.append(w)
-            heights.append(h)
-            aspect_ratio.append(w/h)
-            colors.append(color_dict.setdefault(name, len(color_dict)))
 
-            heat_map = heat_maps.setdefault(name, np.zeros((heat_w, heat_h)))
-            heat_map[int(round(y_min*scale_h)):int(round(y_max*scale_h)), int(round(x_min*scale_w)):int(round(x_max*scale_w))]+=1
+def analyze_rdd():
+    for file_name in os.listdir(annotations_dir):
+        img_w, img_h = None, None
+        scale_w, scale_h = None, None
+        tree = ET.parse(annotations_dir+file_name)
+        root = tree.getroot()
+        print(file_name)
+        print(root.tag)
+        for child in root:
+            if child.tag == 'size':
+                for pos, grand_child in enumerate(child):
+                    if grand_child.tag == 'width':
+                        img_w = int(grand_child.text)
+                        scale_w = heat_w/img_w
+                    if grand_child.tag == 'height':
+                        img_h = int(grand_child.text)
+                        scale_h = heat_h/img_h
+            if child.tag == 'object':
+                name_pos = None
+                bnd_box_pos = None
+                for pos, grand_child in enumerate(child):
+                    if grand_child.tag == 'name':
+                        name_pos = pos
+                    if grand_child.tag == 'bndbox':
+                        bnd_box_pos = pos
 
+                name = child[name_pos].text
+                names.append(name)
+                x_min, y_min, x_max, y_max = [int(child[bnd_box_pos][x].text) for x in range(4)]
+                w = x_max - x_min
+                h = y_max - y_min
+
+                widths.append(w)
+                heights.append(h)
+                aspect_ratio.append(w/h)
+                colors.append(color_dict.setdefault(name, len(color_dict)))
+
+                heat_map = heat_maps.setdefault(name, np.zeros((heat_w, heat_h)))
+                heat_map[int(round(y_min*scale_h)):int(round(y_max*scale_h)), int(round(x_min*scale_w)):int(round(x_max*scale_w))]+=1
+
+analyze_tdt()
+#analyze_rdd()
 
 # Display scatterplot of height-width of bounding-boxes.
 fig, ax = plt.subplots()
