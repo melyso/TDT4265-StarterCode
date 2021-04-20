@@ -9,8 +9,19 @@ class ResNet(torch.nn.Module):
         self.output_channels = output_channels
         image_channels = cfg.MODEL.BACKBONE.INPUT_CHANNELS
         self.output_feature_shape = cfg.MODEL.PRIORS.FEATURE_MAPS
-
-        resnet = models.resnet34(pretrained=True)
+        if cfg.MODEL.BACKBONE.RESNET_TYPE == 18:
+            resnet = models.resnet18(pretrained=True)
+        if cfg.MODEL.BACKBONE.RESNET_TYPE == 34:
+            resnet = models.resnet34(pretrained=True)
+        elif cfg.MODEL.BACKBONE.RESNET_TYPE == 50:
+            resnet = models.resnet50(pretrained=True)
+        elif cfg.MODEL.BACKBONE.RESNET_TYPE == 101:
+            resnet = models.resnet101(pretrained=True)
+        elif cfg.MODEL.BACKBONE.RESNET_TYPE == 152:
+            resnet = models.resnet152(pretrained=True)
+        else:
+            print("Resnet model number not recognized. Using resnet34.")
+            resnet = models.resnet34(pretrained=True)
         # Freeze first half of network
         for c in list(resnet.children())[:-5]:
             for p in c.parameters():

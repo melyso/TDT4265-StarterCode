@@ -1,0 +1,40 @@
+MODEL:
+    NUM_CLASSES: 5
+    BACKBONE:
+        NAME: 'resnet'
+        RESNET_TYPE: 101
+        #for using anything above resnet34
+        OUT_CHANNELS: [1024, 2048, 256, 128, 64, 64]
+        #OUT_CHANNELS: [256, 512, 256, 128, 64, 64]
+    PRIORS:
+        # #boxes = 2 + #ratio * 2
+        BOXES_PER_LOCATION: [6, 6, 6, 6, 6, 6]
+        ASPECT_RATIOS: [[2, 5], [2, 5], [2, 5], [2, 5], [2, 5], [2, 5]]
+
+#        MIN_SIZES: [[7, 7], [20, 20], [111, 111], [162, 162], [213, 213], [264, 264]]
+#        MAX_SIZES: [[120, 120], [160, 160], [200, 200], [260, 260], [310, 310], [350, 350]]
+
+        #Double the min and max sizes when we double imaage size
+        MIN_SIZES: [[60, 60], [120, 120], [222, 222], [324, 324], [426, 426], [528, 528]]
+        MAX_SIZES: [[120, 120], [222, 222], [324, 324], [426, 426], [528, 528], [630, 630]]
+        STRIDES: [[16, 16], [32, 32], [64, 64], [128, 128], [200, 200], [600, 600]]
+
+INPUT:
+    PIXEL_STD: [0.229, 0.224, 0.225] #[0.003921569, 0.003921569, 0.003921569] # Set pixel std to 1/255 as VGG is pre-trained on images in range (roughly) [-127.5, 127.5]
+    IMAGE_SIZE: [600, 600]
+DATASETS:
+#    TRAIN: ("mnist_detection_train", "mnist_detection_val")
+#    TEST: ("mnist_detection_val", )
+    TRAIN: ("rdd2020_train",)
+    TEST: ("rdd2020_val", )
+SOLVER:
+    MAX_ITER: 100000
+    GAMMA: 0.1
+    BATCH_SIZE: 32
+    LR: 2e-4
+    WEIGHT_DECAY: 1e-4
+    OPTIM: "Adam"
+OUTPUT_DIR: 'outputs/rdd2020_resnet_higher_res_wider'
+DATASET_DIR: "/work/datasets"
+EVAL_STEP: 1500
+MODEL_SAVE_STEP: 1500

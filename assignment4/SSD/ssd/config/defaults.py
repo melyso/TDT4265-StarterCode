@@ -10,7 +10,6 @@ cfg.MODEL.NUM_CLASSES = 21
 cfg.MODEL.NEG_POS_RATIO = 3
 cfg.MODEL.CENTER_VARIANCE = 0.1
 cfg.MODEL.SIZE_VARIANCE = 0.2
-
 # ---------------------------------------------------------------------------- #
 # Backbone
 # ---------------------------------------------------------------------------- #
@@ -20,6 +19,7 @@ cfg.MODEL.BACKBONE.OUT_CHANNELS = (512, 1024, 512, 256, 256, 256)
 cfg.MODEL.BACKBONE.PRETRAINED = True
 cfg.MODEL.BACKBONE.INPUT_CHANNELS = 3
 cfg.MODEL.BACKBONE.BASIC = True
+cfg.MODEL.BACKBONE.RESNET_TYPE = 34
 # -----------------------------------------------------------------------------
 # PRIORS
 # -----------------------------------------------------------------------------
