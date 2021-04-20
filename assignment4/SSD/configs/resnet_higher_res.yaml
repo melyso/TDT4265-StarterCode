@@ -33,7 +33,7 @@ SOLVER:
     LR: 2e-4
     WEIGHT_DECAY: 1e-4
     OPTIM: "Adam"
-OUTPUT_DIR: 'outputs/resnet_600_aspect'
+OUTPUT_DIR: 'outputs/resnet_600_aspect_brightness'
 DATASET_DIR: "datasets"
 EVAL_STEP: 2000
 MODEL_SAVE_STEP: 2000
