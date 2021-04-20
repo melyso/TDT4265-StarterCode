@@ -20,6 +20,7 @@ cfg.MODEL.BACKBONE.PRETRAINED = True
 cfg.MODEL.BACKBONE.INPUT_CHANNELS = 3
 cfg.MODEL.BACKBONE.BASIC = True
 cfg.MODEL.BACKBONE.RESNET_TYPE = 34
+cfg.MODEL.BACKBONE.RESNEXT_TYPE = 50
 # -----------------------------------------------------------------------------
 # PRIORS
 # -----------------------------------------------------------------------------

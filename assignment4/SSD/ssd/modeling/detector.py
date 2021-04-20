@@ -5,6 +5,7 @@ from ssd.modeling.box_head.box_head import SSDBoxHead
 from ssd.utils.model_zoo import load_state_dict_from_url
 from ssd import torch_utils
 from ssd.modeling.backbone.resnet import ResNet
+from ssd.modeling.backbone.resnext import ResNext
 
 class SSDDetector(nn.Module):
     def __init__(self, cfg):
@@ -38,6 +39,9 @@ def build_backbone(cfg):
         return model
     if backbone_name == "resnet":
         model = ResNet(cfg)
+        return model
+    if backbone_name == "resnext":
+        model = ResNext(cfg)
         return model
     if backbone_name == "vgg":
         model = VGG(cfg)
