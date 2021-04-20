@@ -8,10 +8,10 @@ def build_transforms(cfg, is_train=True):
         transform = [
             ConvertFromInts(),
             #PhotometricDistort(),
-            RandomBrightness(),
+            # RandomBrightness(),
             #Expand(cfg.INPUT.PIXEL_MEAN), #Added Expand augmentation
-            RandomSampleCrop(), # Added random sample crop
-            RandomMirror(), # Added mirroring
+            # RandomSampleCrop(), # Added random sample crop
+            # RandomMirror(), # Added mirroring
             ToPercentCoords(),
             Resize(cfg.INPUT.IMAGE_SIZE),
             SubtractMeans(cfg.INPUT.PIXEL_MEAN, cfg.INPUT.PIXEL_STD),

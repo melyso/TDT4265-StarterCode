@@ -7,19 +7,21 @@ MODEL:
     INPUT_CHANNELS: 3
     BASIC: False
   PRIORS:
-    MIN_SIZES: [[2, 2], [15, 15], [30, 30], [60, 60], [150, 150], [230, 230]]
-    MAX_SIZES: [[15, 15], [30, 30], [60, 60], [150, 150], [230, 230], [300, 300]]
+    MIN_SIZES: [[12, 12], [60, 60], [111, 111], [162, 162], [213, 213], [264, 264]]
+    #MAX_SIZES: [[15, 15], [30, 30], [60, 60], [150, 150], [230, 230], [300, 300]]
 INPUT:
   IMAGE_SIZE: [300, 300]
 DATASETS:
   TRAIN: ("rdd2020_train",)
   TEST: ("rdd2020_val", )
 SOLVER:
-  MAX_ITER: 15000
+  MAX_ITER: 10000
   GAMMA: 0.1
   BATCH_SIZE: 64
   LR: 1e-3
   WEIGHT_DECAY: 1e-4
   OPTIM: "Adam"
-OUTPUT_DIR: 'outputs/rdd2020'
+OUTPUT_DIR: 'outputs/assignment4_best'
 DATASET_DIR: "datasets"
+EVAL_STEP: 2000
+MODEL_SAVE_STEP: 2000
