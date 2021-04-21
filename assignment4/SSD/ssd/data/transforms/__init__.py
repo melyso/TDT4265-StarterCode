@@ -7,9 +7,8 @@ def build_transforms(cfg, is_train=True):
     if is_train:
         transform = [
             ConvertFromInts(),
-            PhotometricDistort(),
-            #RandomBrightness(),
-            #Expand(cfg.INPUT.PIXEL_MEAN), #Added Expand augmentation
+            RandomBrightness(),
+            #Expand(cfg.INPUT.PIXEL_MEAN), # Random expand (Gave worse performance)
             RandomSampleCrop(), # Added random sample crop
             RandomMirror(), # Added mirroring
             ToPercentCoords(),
