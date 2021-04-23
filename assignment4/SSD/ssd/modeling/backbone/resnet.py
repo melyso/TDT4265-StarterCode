@@ -29,7 +29,7 @@ class ResNet(torch.nn.Module):
         
         #given  input size 600x600:
         if cfg.INPUT.IMAGE_SIZE == [600, 600]:
-            #ouput size 37    
+            #ouput size 38x38    
             self.conv1 = nn.Sequential(
                 resnet.conv1,
                 resnet.bn1,
@@ -40,12 +40,12 @@ class ResNet(torch.nn.Module):
                 resnet.layer3
             )
             
-            #output size 18
+            #output size 19x19
             self.conv2 = nn.Sequential(
                 resnet.layer4
             )
 
-            #output size 9
+            #output size 9x9
             self.conv3 = nn.Sequential(
                 nn.BatchNorm2d(self.output_channels[1]),
                 nn.ReLU(),
@@ -59,7 +59,7 @@ class ResNet(torch.nn.Module):
             )
         #given  input size 300x300:
         else:
-            #ouput size 37    
+            #ouput size 38    
             self.conv1 = nn.Sequential(
                 resnet.conv1,
                 resnet.bn1,
@@ -69,7 +69,7 @@ class ResNet(torch.nn.Module):
                 resnet.layer2
             )
             
-            #output size 18
+            #output size 19
             self.conv2 = nn.Sequential(
                 resnet.layer3
             )
@@ -90,6 +90,7 @@ class ResNet(torch.nn.Module):
             nn.ReLU(),
             nn.Conv2d(256, self.output_channels[3], 3, stride=2, padding=1)
         )
+        #output res 3x3
         self.conv5 = nn.Sequential(
             nn.BatchNorm2d(self.output_channels[3]),
             nn.ReLU(),
@@ -101,6 +102,7 @@ class ResNet(torch.nn.Module):
             nn.ReLU(),
             nn.Conv2d(256, self.output_channels[4], 3, stride=2, padding=1)
         )
+        #output res 1x1
         self.conv6 = nn.Sequential(
             nn.BatchNorm2d(self.output_channels[4]),
             nn.ReLU(),
